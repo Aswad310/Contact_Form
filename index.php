@@ -17,7 +17,7 @@
       
         <div id="error"></div>
 
-        <form>
+        <form action="" method="POST">
             <div class="form-group">
                 <label for="email">Email address</label>
                 <input type="email" class="form-control" id="email" placeholder="name@example.com">

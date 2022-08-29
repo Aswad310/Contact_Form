@@ -1,4 +1,4 @@
-// Validation
+// Validation using jQury
 
 // Prevents the form from submitting untill it pass from vaidations
 $("form").submit(function(e){
