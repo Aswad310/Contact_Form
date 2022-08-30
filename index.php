@@ -1,54 +1,92 @@
 <?php
-
     // print_r($_POST);
-
     $error = "";
     $successMessage = "";
-   
 
+    // Variable validation function
+    function test_input($data)
+    {
+        $data = trim($data);
+        $data = stripslashes($data);
+        $data = htmlspecialchars($data);
+        return $data;
+    }
+   
+    // checks whether the form is submit using post method   
     if(isset($_POST['submit']))
     {
-        if(!$_POST['email'])
+        ############ Email validation ############
+        if(empty($_POST['email']))
         {
             $error.= "The email field is required.<br>"; 
         }
-        if(!$_POST['subject'])
+        else
+        {
+            // var email 
+            $email = test_input($_POST['email']);
+
+            // check if e-mail address is well-formed
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
+            {
+                $error.= "Invalid email format.<br>";
+            }
+        }
+    
+        ############ Subject validation ############
+        if(empty($_POST['subject']))
         {
             $error.= "The subject field is required.<br>"; 
         }
-        if(!$_POST['content'])
+        else
+        {
+            // var subject
+            $subject = test_input($_POST['subject']);   
+            
+            // check if name only contains letters and whitespace
+            if(!preg_match("/^[a-zA-Z-' ]*$/",$subject)) 
+            {
+                $error .= "Only letters and white space allowed in Subject field.<br>";
+            }
+        }
+
+        ############ Content validation ############
+        if(empty($_POST['content']))
         {
             $error.= "The content field is required.<br>"; 
         }
-        if ($_POST['email'] && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)===false) 
+        else
         {
-            $error.= "email is not a valid email address.<br>";
+            // var content
+            $content = test_input($_POST['content']);
         }
 
+        ############ DANGER & SUCCESS  ############
+        // error variable contain some error value then generate error 
         if($error != "")
         {
             $error = '<div class="alert alert-danger" role="alert"><p><strong>There were error(s) in your form</strong></p>'. $error .'</div>'; 
         }
         else
         {
-            $emailTo = "your_email@gmail.com";
-            $emailfrom = $_POST['email'];
-            $subject =  $_POST['subject'];
-            $content = $_POST['content'];
-            $headers = "From: $emailfrom\n";
+            // contact to the user
+            $emailTo = "your_email@gmail.com"; 
+            $headers = "From: $email\n";
             $headers .= "MIME-Version: 1.0\n";
             $headers .= "Content-type: text/html; charset=iso-8859-1\n";
 
+            // mail function
             if(mail($emailTo, $subject, $content, $headers))
             {
+                // if message was send to the user then generate success messsage
                 $successMessage = '<div class="alert alert-success" role="alert"><p><strong>Your message was sent, we will get back to you ASAP!</strong></p></div>'; 
             }
             else
             {
+                // else error
                 $error = '<div class="alert alert-danger" role="alert"><p><strong>Your message could not be send - Please try again later</strong></p></div>';
             }
         }
-    }
+    } 
 ?>
 
 
@@ -67,7 +105,7 @@
   <body>
 
     <div class="container">
-        <h1>Get in touch!</h1>
+        <h1 class="mt-5">Get in touch!</h1>
       
         <div id="error"><?php echo $error.$successMessage?></div>
 
