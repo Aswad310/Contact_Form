@@ -2,7 +2,7 @@
 
 // Prevents the form from submitting untill it pass from vaidations
 $("form").submit(function(e){
-    e.preventDefault();
+    // e.preventDefault();
 
     // empty variable
     var error = "";
@@ -22,10 +22,12 @@ $("form").submit(function(e){
     if(error!="")
     {
         $("#error").html('<div class="alert alert-danger" role="alert"><p><strong>There were error(s) in your form</strong></p>'+ error +'</div>');
+        return false;
     }
     else
     {
         // after validation completed this will unbind the preventions
-        $("form").unbind("submit").submit();
-    }
+        // $("form").unbind("submit").submit();
+        return true;
+    } 
 });  
