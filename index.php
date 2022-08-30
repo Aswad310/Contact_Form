@@ -105,7 +105,7 @@
   <body>
 
     <div class="container">
-        <h1 class="mt-5">Get in touch!</h1>
+        <h1 class="mt-">Get in touch!</h1>
       
         <div id="error"><?php echo $error.$successMessage?></div>
 
