@@ -2,6 +2,8 @@
     // print_r($_POST);
     $error = "";
     $successMessage = "";
+    $emailError = "";
+    $subjectError = "";
 
     // Variable validation function
     function test_input($data)
@@ -28,7 +30,7 @@
             // check if e-mail address is well-formed
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) 
             {
-                $error.= "Invalid email format.<br>";
+                $emailError = " - Invalid email format";
             }
         }
     
@@ -43,9 +45,9 @@
             $subject = test_input($_POST['subject']);   
             
             // check if name only contains letters and whitespace
-            if(!preg_match("/^[a-zA-Z-' ]*$/",$subject)) 
+            if(!preg_match("/^[a-zA-Z-' ]*$/", $subject)) 
             {
-                $error .= "Only letters and white space allowed in Subject field.<br>";
+                $subjectError = "Only letters and white space allowed in Subject field";
             }
         }
 
@@ -62,7 +64,7 @@
 
         ############ DANGER & SUCCESS  ############
         // error variable contain some error value then generate error 
-        if($error != "")
+        if($error != "" || $emailError != "" || $subjectError != "" )
         {
             $error = '<div class="alert alert-danger" role="alert"><p><strong>There were error(s) in your form</strong></p>'. $error .'</div>'; 
         }
@@ -105,7 +107,7 @@
   <body>
 
     <div class="container">
-        <h1 class="mt-">Get in touch!</h1>
+        <h1 class="mt-5">Get in touch!</h1>
       
         <div id="error"><?php echo $error.$successMessage?></div>
 
@@ -113,12 +115,14 @@
             <div class="form-group">
                 <label for="email">Email address</label>
                 <input type="email" name="email" class="form-control" id="email" placeholder="name@example.com">
-                <small>We will never share your email with anyone else</small>
+                <small>We will never share your email with anyone else <span class="text-danger"><?php echo $emailError; ?></span> </small>
+
             </div>
 
             <div class="form-group">
                 <label for="subject">Subject</label>
                 <input type="text" name="subject" class="form-control" id="subject">
+                <small class="text-danger"><?php echo $subjectError; ?></small>
             </div>
 
             <div class="form-group">
